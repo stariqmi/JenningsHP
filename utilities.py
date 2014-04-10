@@ -139,12 +139,10 @@ def parse_failed():
 	driver = webdriver.PhantomJS()
 	results_txt = open("results.csv", "a")	# Open for appending
 
-	tax_lines = []
 	
 	# Transfer failed results from  
 	failed_txt = open("failed.txt")	# Open for reading
-	for line in failed_txt.readlines():
-		tax_lines.append(line)
+	tax_lines = failed_txt.readlines()
 	failed_txt.close()	# Close
 
 	failed_txt = open("failed.txt","w")	# Open for writing
