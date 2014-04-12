@@ -98,16 +98,16 @@ def find_details(parcel_no, driver):
 
 
 # Parses Text File to create a tab delimeted array from each line
-def parse_text():
+def parse_text(filename):
 	driver = webdriver.PhantomJS()
 	results_txt = open("results.csv", "w")	# Open for writing
 	failed_txt = open("failed.txt", "w")	# Open for writing
 
 	# Open tax.txt
-	tax_text = open("tax.txt")	# Open for reading
+	tax_text = open(filename)	# Open for reading
 	tax_lines = tax_text.readlines()
 	headers = tax_lines[0].split('\t')
-	results_txt.write(','.join(["spr_tax","fall_tax"] + headers[:2] + ["first_name","last_name"] + headers[3:]))
+	results_txt.write(','.join(["spr_tax","fall_tax","first_name","last_name","street_address","city","zip"] + headers))
 	
 	# For each line in tax.txt
 	for line in tax_lines:
@@ -117,12 +117,12 @@ def parse_text():
 			details = find_details(data[0],driver)
 			if details:
 				# Update data with details
-				data[2] = details["name"].split(',')[0]
-				data[3] = details["name"].split(',')[1] if len(details["name"].split(',')) > 1 else ""
-				data[4] = details["street_address"].replace(',','')
-				data[5] = details["city"].replace(',','-')
-				data[6] = details["zip"]
-				result = [details["spring_tax"],details["fall_tax"]] + data
+				first_name = details["name"].split(',')[0]
+				last_name = details["name"].split(',')[1] if len(details["name"].split(',')) > 1 else ""
+				street_address = details["street_address"].replace(',','')
+				city = details["city"].replace(',','-')
+				zip = details["zip"]
+				result = [details["spring_tax"],details["fall_tax"],first_name,last_name,street_address,city,zip] + data
 				
 				print ",".join(result)
 				results_txt.write(",".join(result))
