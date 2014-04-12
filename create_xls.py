@@ -10,7 +10,8 @@ lines = csv.readlines()
 
 # Write lines from csv to XLS
 for r in range(0,len(lines)):
-	row = lines[r].split(',')
+	print lines[r]
+	row = lines[r].decode("utf-8").split(',')
 	for c in range(0,len(row)):
 		worksheet.write(r,c,row[c])
 

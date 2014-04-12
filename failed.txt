@@ -1,1 +1,0 @@
-﻿ParcelNum	LastTransactDate	OwnerName1	Address	PropCity	PropZipCode	Level01Area	UpperSqFtTotal	BsmtArea	LivingArea	YearBuilt	AssessValLand	AssessValImpr	GrossAssessVal	NetAssessVal	TotalAssessVal	SemiAnnualTax	TownshipName	county_name	MailAddress	MailCity	MailState	MailZipCode	PropUseCode	CoTaxId	Homestead	Mortgage	State Property ID
