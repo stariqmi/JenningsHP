@@ -110,26 +110,51 @@ def parse_text(filename):
 	results_txt.write(','.join(["spr_tax","fall_tax","first_name","last_name","street_address","city","zip"] + headers))
 	
 	# For each line in tax.txt
-	for line in tax_lines:
+	for line in tax_lines[1:]:
 		data = line.split('\t')
-		print "Searching for parcel number ------ {0}".format(data[0])
-		try:
-			details = find_details(data[0],driver)
-			if details:
-				# Update data with details
-				first_name = details["name"].split(',')[0]
-				last_name = details["name"].split(',')[1] if len(details["name"].split(',')) > 1 else ""
-				street_address = details["street_address"].replace(',','')
-				city = details["city"].replace(',','-')
-				zip = details["zip"]
-				result = [details["spring_tax"],details["fall_tax"],first_name,last_name,street_address,city,zip] + data
+		# If no parcel # was found from parcelFetcher
+		if data[0] == "0000000":
+			# Write empty results to the csv file
+			result = ["","","","","","",""] + data
 				
+			print ",".join(result)
+			results_txt.write(",".join(result))
+		
+		else:
+			print "Searching for parcel number ------ {0}".format(data[0])
+			try:
+				details = find_details(data[0],driver)
+				if details:
+					# Update data with details
+					first_name = details["name"].split(',')[0]
+					last_name = details["name"].split(',')[1] if len(details["name"].split(',')) > 1 else ""
+					street_address = details["street_address"].replace(',','')
+					city = details["city"].replace(',','-')
+					zip = details["zip"]
+					result = [details["spring_tax"],details["fall_tax"],first_name,last_name,street_address,city,zip] + data
+					
+					print ",".join(result)
+					results_txt.write(",".join(result))
+
+				# When no results are found
+				else:
+					# Write empty results to the csv file
+					result = ["","","","","","",""] + data
+						
+					print ",".join(result)
+					results_txt.write(",".join(result))
+
+			except Exception as exc:
+				print "ERROR:\n{0}".format(exc)
+				print "Search failed for parcel number ------ {0}".format(data[0])	
+				failed_txt.write('\t'.join(data))
+
+				# Write empty results to the csv file
+				result = ["","","","","","",""] + data
+					
 				print ",".join(result)
 				results_txt.write(",".join(result))
-		except Exception as exc:
-			print "ERROR:\n{0}".format(exc)
-			print "Search failed for parcel number ------ {0}".format(data[0])	
-			failed_txt.write('\t'.join(data))
+
 
 	failed_txt.close()
 	results_txt.close()
